@@ -44,46 +44,38 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Container(
-        color: Colors.white,
-        child: Stack(
-          children: [
-            Expanded(
-              child: Container(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        color: Colors.lightBlue[300],
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        color: Colors.lightGreen[400],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+        color: const Color.fromRGBO(255, 250, 205, 1),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          // child: Column(children: [
+          //   Expanded(
+          //     child: Container(
+          //       color: Colors.lightBlue[300],
+          //     ),
+          //   ),
+          child: Center(
+            child: Expanded(
+              // FittedBox(
+              // fit: BoxFit.fitWidth,
+              child: Image.asset('images/koshien.png'),
+              // child: Image.asset('images/PNG_transparency_demonstration_1.png'),
             ),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              child: Center(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Image.asset('images/koshien.png'),
-                  // child: Image.asset('images/PNG_transparency_demonstration_1.png'),
-                ),
+          ),
+          //   Expanded(
+          //     child: Container(
+          //       color: Colors.lightGreen[400],
+          //     ),
+          //   ),
+          // ],
+          // ),
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChooseLevel(),
               ),
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChooseLevel(),
-                  ),
-                );
-              },
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
