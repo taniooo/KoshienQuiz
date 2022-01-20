@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: const MyHomePage(title: '甲子園クイズ'),
+      home: const MyHomePage(title: '甲子園クイズtest'),
     );
   }
 }
