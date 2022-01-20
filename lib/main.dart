@@ -53,12 +53,13 @@ class _MyHomePageState extends State<MyHomePage> {
           //       color: Colors.lightBlue[300],
           //     ),
           //   ),
-          child: Center(
-            child: Expanded(
-              // FittedBox(
-              // fit: BoxFit.fitWidth,
-              child: Image.asset('images/koshien.png'),
-              // child: Image.asset('images/PNG_transparency_demonstration_1.png'),
+          child: const Center(
+            child: Text(
+              '甲子園クイズ',
+              style: TextStyle(
+                fontSize: 50,
+                color: Colors.lightGreen,
+              ),
             ),
           ),
           //   Expanded(
