@@ -1,6 +1,4 @@
 class Setting {
-  static const int baseQuestionNum = 10;
-  static const int lv5QuestionNum = 5;
   static const int maxScore = 10; //満点
   static const int lv5UnlockScore = 32; //Lv5のロック解除条件として、Lv1〜4の合計点を設定
   static const int maxAllScore = maxScore * 5;
@@ -226,8 +224,8 @@ class QuizData {
       ],
       [
         '第89回(2007年)全国高等学校野球選手権大会の決勝戦において、佐賀北は、'
-            '広陵の先発野村祐輔に7回まで0点に抑えられていた。'
-            '佐賀北は、4点ビハインドの8回裏、1点を返し、尚も満塁の場面で、'
+            '広陵の先発野村祐輔に7回まで0点に抑えられていたが、'
+            '4点ビハインドの8回裏、1点を返し、尚も満塁の場面で、'
             'ホームランを放ち逆転に成功した。'
             'この満塁ホームランを放ったのは？',
         '久保貴大',

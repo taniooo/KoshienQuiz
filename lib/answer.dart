@@ -33,19 +33,9 @@ class Answer extends StatelessWidget {
 
     if (choice == answer) {
       message = '正解！！！';
-      if (level == 5) {
-        curScore = curScore + 2;
-      } else {
-        curScore++;
-      }
+      curScore++;
     } else {
       message = '不正解・・・';
-    }
-
-    if (level == 5) {
-      questionNum = Setting.lv5QuestionNum;
-    } else {
-      questionNum = Setting.baseQuestionNum;
     }
   }
 
@@ -57,7 +47,6 @@ class Answer extends StatelessWidget {
   int level = 0;
   Color color = Colors.black;
   String message = '';
-  int questionNum = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -74,96 +63,99 @@ class Answer extends StatelessWidget {
           color: const Color.fromRGBO(255, 250, 205, 1),
           padding: const EdgeInsets.all(15),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                message,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.redAccent,
-                  fontSize: 40,
-                ),
-              ),
-              const SizedBox(height: 30),
-              const Text('正解は・・・'),
-              Container(
-                height: 260,
-                width: double.infinity,
-                color: Colors.white,
-                margin: const EdgeInsets.only(top: 15, bottom: 15),
-                child: Column(
-                  children: [
-                    Text(
-                      answer,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 150,
-                        color: color,
-                        backgroundColor: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      answerText,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: color,
-                        backgroundColor: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                '現在の得点： $curScore / ${Setting.maxScore}',
-                style: const TextStyle(
-                  //fontWeight: FontWeight.bold,
-                  color: Colors.deepOrangeAccent,
-                  fontSize: 25,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 45),
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 3.0),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: (curNum != questionNum)
-                    ? const Text(
-                        '画面をTAPして次へ　▶︎▶▶',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    : const Text(
-                        '画面をTAPして結果発表へ',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                      ),
-              ),
               Expanded(
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
+                child: SingleChildScrollView(
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(child: AdButton(message: 'とりあえず\n広告を見る')),
-                      const Expanded(child: GiveUpButton()),
-                      Expanded(child: AdButton(message: '広告を見て\nおちつく')),
+                      Text(
+                        message,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.redAccent,
+                          fontSize: 40,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      const Text('正解は・・・'),
+                      Container(
+                        height: 260,
+                        width: double.infinity,
+                        color: Colors.white,
+                        margin: const EdgeInsets.only(top: 15, bottom: 15),
+                        child: Column(
+                          children: [
+                            Text(
+                              answer,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 150,
+                                color: color,
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              answerText,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: color,
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        '現在の得点： $curScore / ${Setting.maxScore}',
+                        style: const TextStyle(
+                          //fontWeight: FontWeight.bold,
+                          color: Colors.deepOrangeAccent,
+                          fontSize: 25,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 45),
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black, width: 3.0),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: (curNum != Setting.maxScore)
+                            ? const Text(
+                                '画面をTAPして次へ　▶︎▶▶',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : const Text(
+                                '画面をTAPして結果発表へ',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
+                              ),
+                      ),
                     ],
                   ),
                 ),
+              ),
+              Row(
+                children: [
+                  Expanded(child: AdButton(message: 'とりあえず\n広告を見る')),
+                  const Expanded(child: GiveUpButton()),
+                  Expanded(child: AdButton(message: '広告を見て\nおちつく')),
+                ],
               ),
             ],
           ),
         ),
         onTap: () async {
-          if (curNum != questionNum) {
+          if (curNum != Setting.maxScore) {
             await Navigator.push(
               context,
               MaterialPageRoute(

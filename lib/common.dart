@@ -2,6 +2,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_format/choose_level.dart';
 
+String LvConv(int level) {
+  String strLevel = '';
+
+  switch (level) {
+    case 1:
+      strLevel = 'よわい';
+      break;
+    case 2:
+      strLevel = 'ふつう';
+      break;
+    case 3:
+      strLevel = 'つよい';
+      break;
+    case 4:
+      strLevel = 'パワフル';
+      break;
+    case 5:
+      strLevel = 'ヘル';
+      break;
+  }
+
+  return strLevel;
+}
+
 class AdButton extends StatelessWidget {
   AdButton({Key? key, required this.message}) : super(key: key);
 

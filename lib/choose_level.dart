@@ -124,96 +124,100 @@ class _ChooseLevel extends State<ChooseLevel> {
         color: const Color.fromRGBO(255, 250, 205, 1),
         padding: const EdgeInsets.all(15),
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('挑戦するレベルを選択してください。'),
-            Stack(
-              children: [
-                LevelButton(level: 1),
-                Positioned(
-                  child: Stamp(score: score1, level: 1),
-                  left: 0,
-                  bottom: 0,
-                ),
-                Positioned(
-                  child: HighScore(score: score1, level: 1),
-                  right: 0,
-                  bottom: 0,
-                ),
-              ],
-            ),
-            Stack(
-              children: [
-                LevelButton(level: 2),
-                Positioned(
-                  child: Stamp(score: score2, level: 2),
-                  left: 0,
-                  bottom: 0,
-                ),
-                Positioned(
-                  child: HighScore(score: score2, level: 2),
-                  right: 0,
-                  bottom: 0,
-                ),
-              ],
-            ),
-            Stack(
-              children: [
-                LevelButton(level: 3),
-                Positioned(
-                  child: Stamp(score: score3, level: 3),
-                  left: 0,
-                  bottom: 0,
-                ),
-                Positioned(
-                  child: HighScore(score: score3, level: 3),
-                  right: 0,
-                  bottom: 0,
-                ),
-              ],
-            ),
-            Stack(
-              children: [
-                LevelButton(level: 4, lv4UnlockFlg: lv4UnlockFlg),
-                Positioned(
-                  child: Stamp(
-                      score: score4, level: 4, lv4UnlockFlg: lv4UnlockFlg),
-                  left: 0,
-                  bottom: 0,
-                ),
-                Positioned(
-                  child: HighScore(score: score4, level: 4),
-                  right: 0,
-                  bottom: 0,
-                ),
-              ],
-            ),
-            Stack(
-              children: [
-                LevelButton(level: 5, lv5UnlockFlg: lv5UnlockFlg),
-                Positioned(
-                  child: Stamp(score: score5, level: 5),
-                  left: 0,
-                  bottom: 0,
-                ),
-                Positioned(
-                  child: HighScore(score: score5, level: 5),
-                  right: 0,
-                  bottom: 0,
-                ),
-              ],
-            ),
             Expanded(
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                child: Row(
+              child: SingleChildScrollView(
+                child: Column(
                   children: [
-                    Expanded(child: AdButton(message: 'とりあえず\n広告を見る')),
-                    Expanded(child: AdButton(message: '何も考えず\n広告を見る')),
-                    Expanded(child: AdButton(message: '広告を見て\nおちつく')),
+                    const Text('挑戦するレベルを選択してください。'),
+                    Stack(
+                      children: [
+                        LevelButton(level: 1),
+                        Positioned(
+                          child: Stamp(score: score1, level: 1),
+                          left: 0,
+                          bottom: 0,
+                        ),
+                        Positioned(
+                          child: HighScore(score: score1, level: 1),
+                          right: 0,
+                          bottom: 0,
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        LevelButton(level: 2),
+                        Positioned(
+                          child: Stamp(score: score2, level: 2),
+                          left: 0,
+                          bottom: 0,
+                        ),
+                        Positioned(
+                          child: HighScore(score: score2, level: 2),
+                          right: 0,
+                          bottom: 0,
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        LevelButton(level: 3),
+                        Positioned(
+                          child: Stamp(score: score3, level: 3),
+                          left: 0,
+                          bottom: 0,
+                        ),
+                        Positioned(
+                          child: HighScore(score: score3, level: 3),
+                          right: 0,
+                          bottom: 0,
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        LevelButton(level: 4, lv4UnlockFlg: lv4UnlockFlg),
+                        Positioned(
+                          child: Stamp(
+                              score: score4,
+                              level: 4,
+                              lv4UnlockFlg: lv4UnlockFlg),
+                          left: 0,
+                          bottom: 0,
+                        ),
+                        Positioned(
+                          child: HighScore(score: score4, level: 4),
+                          right: 0,
+                          bottom: 0,
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        LevelButton(level: 5, lv5UnlockFlg: lv5UnlockFlg),
+                        Positioned(
+                          child: Stamp(score: score5, level: 5),
+                          left: 0,
+                          bottom: 0,
+                        ),
+                        Positioned(
+                          child: HighScore(score: score5, level: 5),
+                          right: 0,
+                          bottom: 0,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
+            ),
+            Row(
+              children: [
+                Expanded(child: AdButton(message: 'とりあえず\n広告を見る')),
+                Expanded(child: AdButton(message: '何も考えず\n広告を見る')),
+                Expanded(child: AdButton(message: '広告を見て\nおちつく')),
+              ],
             ),
           ],
         ),
@@ -291,24 +295,19 @@ class HighScore extends StatelessWidget {
   HighScore({Key? key, required this.score, required this.level})
       : super(key: key) {
     if (level == 5) {
-      questionNum = Setting.lv5QuestionNum;
-      message1 = '(各2点)';
       color = Colors.white;
-    } else {
-      questionNum = Setting.baseQuestionNum;
     }
     if (score != null) {
-      message2 = '$score点';
+      strScore = '$score点';
     } else {
-      message2 = '-';
+      strScore = '-';
     }
   }
 
   int level = 0;
   int? score;
   int questionNum = 0;
-  String message1 = '';
-  String message2 = '';
+  String strScore = '';
   Color color = Colors.grey;
 
   @override
@@ -316,9 +315,9 @@ class HighScore extends StatelessWidget {
     // scoreがnullの場合は、空のContainerを返す
     return Text(
       '全${QuizData.quizList.elementAt(level - 1).length}問\n'
-      '出題$questionNum問$message1\n'
+      '出題${Setting.maxScore}問\n'
       '最高得点\n'
-      '$message2',
+      '$strScore',
       textAlign: TextAlign.right,
       style: TextStyle(color: color, fontSize: 13),
     );
@@ -332,23 +331,7 @@ class LevelButton extends StatelessWidget {
       this.lv4UnlockFlg = false,
       this.lv5UnlockFlg = false})
       : super(key: key) {
-    switch (level) {
-      case 1:
-        strLevel = 'よわい';
-        break;
-      case 2:
-        strLevel = 'ふつう';
-        break;
-      case 3:
-        strLevel = 'つよい';
-        break;
-      case 4:
-        strLevel = 'パワフル';
-        break;
-      case 5:
-        strLevel = 'ヘル';
-        break;
-    }
+    strLevel = LvConv(level);
   }
 
   int level = 0; //1,2,3
