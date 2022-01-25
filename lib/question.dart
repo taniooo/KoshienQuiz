@@ -161,7 +161,7 @@ class QuestionBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
+      height: 230,
       width: double.infinity,
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(

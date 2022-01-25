@@ -52,7 +52,7 @@ class _Result extends State<Result> {
         height: double.infinity,
         width: double.infinity,
         color: const Color.fromRGBO(255, 250, 205, 1),
-        padding: const EdgeInsets.fromLTRB(15, 50, 15, 15),
+        padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
         child: Column(
           children: [
             Expanded(
@@ -85,7 +85,7 @@ class _Result extends State<Result> {
                     ),
                     const Text('あなたは下記の通りの成績を修められました。'),
                     const Text('${Setting.maxScore}点満点中・・・'),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
                     Visibility(
                       visible: isVisibleList.elementAt(0),
                       child: Text(
@@ -101,7 +101,7 @@ class _Result extends State<Result> {
                       visible: isVisibleList.elementAt(1),
                       child: Column(
                         children: const [
-                          SizedBox(height: 30),
+                          SizedBox(height: 20),
                           Text('あなたは'),
                         ],
                       ),
@@ -138,7 +138,7 @@ class _Result extends State<Result> {
                       visible: isVisibleList.elementAt(6),
                       child: Column(
                         children: [
-                          const SizedBox(height: 45),
+                          const SizedBox(height: 30),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               primary: Colors.white,

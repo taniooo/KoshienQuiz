@@ -37,21 +37,20 @@ class _ChooseLevel extends State<ChooseLevel> {
       score4 = prefs.getInt('score4');
       score5 = prefs.getInt('score5');
     });
-    //Lv4のロック解除条件:Lv1〜3をそれぞれプレイする
+    //Lv4のロック解除条件:Lv1〜3の最高得点が基準点を超える
     if (prefs.getBool('lv4UnlockFlg') != true) {
       if (score1 != null && score2 != null && score3 != null) {
-        messageTitle += 'パワフルが解放されました！';
-        messageContent += 'チャレンジする価値は\n・・・ある！！';
-        await prefs.setBool('lv4UnlockFlg', true);
+        if (score1! + score2! + score3! >= Setting.lv4UnlockScore) {
+          messageTitle += 'パワフルが解放されました！';
+          messageContent += 'チャレンジする価値は\n・・・ある！！';
+          await prefs.setBool('lv4UnlockFlg', true);
+        }
       }
     }
-    //Lv5のロック解除条件:Lv4までプレイ済み、かつLv1〜4の最高得点が基準点を超える
+    //Lv5のロック解除条件:Lv4の最高得点が基準点を超える
     if (prefs.getBool('lv5UnlockFlg') != true) {
-      if (score1 != null &&
-          score2 != null &&
-          score3 != null &&
-          score4 != null) {
-        if (score1! + score2! + score3! + score4! >= Setting.lv5UnlockScore) {
+      if (score4 != null) {
+        if (score4! >= Setting.lv5UnlockScore) {
           messageTitle += 'ヘルが解放されました！';
           messageContent += '理不尽な戦いが今、\n始まる・・・！！！';
           await prefs.setBool('lv5UnlockFlg', true);
@@ -312,7 +311,6 @@ class HighScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // scoreがnullの場合は、空のContainerを返す
     return Text(
       '全${QuizData.quizList.elementAt(level - 1).length}問\n'
       '出題${Setting.maxScore}問\n'
