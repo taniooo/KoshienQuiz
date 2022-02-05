@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "975186613822",
+    "project_id": "koshienquiz",
+    "storage_bucket": "koshienquiz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975186613822:android:a4433fdf943473e2c6636f",
+        "android_client_info": {
+          "package_name": "com.example.quiz_format"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "975186613822-t77c1jotnv8qjc8cmj68ve9e8hidtcgt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbFtbn0W_Lj8ch5Uc4ibIH5H9c42omCRs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975186613822-t77c1jotnv8qjc8cmj68ve9e8hidtcgt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "975186613822-v0t4m9k4v9qv281goqjr8v43u83i5psp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ntyswy.koshienquiz"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

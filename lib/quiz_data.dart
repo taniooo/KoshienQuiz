@@ -3,6 +3,7 @@ class Setting {
   static const int lv4UnlockScore = 24; //Lv4のロック解除条件として、Lv1〜3の合計点を設定
   static const int lv5UnlockScore = 8; //Lv5のロック解除条件として、Lv4の得点を設定
   static const int maxAllScore = maxScore * 5;
+  static const int initPoint = 4; //初期ポイント4
 }
 
 class QuizData {

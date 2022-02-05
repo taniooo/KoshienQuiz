@@ -114,9 +114,8 @@ class Question extends StatelessWidget {
             ),
             Row(
               children: [
-                Expanded(child: AdButton(message: 'とりあえず\n広告を見る')),
                 const Expanded(child: GiveUpButton()),
-                Expanded(child: AdButton(message: '広告を見て\nおちつく')),
+                Expanded(child: NeverGiveUpButton()),
               ],
             ),
           ],

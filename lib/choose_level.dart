@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:quiz_format/question.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,8 +30,10 @@ class _ChooseLevel extends State<ChooseLevel> {
   bool lv5UnlockFlg = false;
   String messageTitle = '';
   String messageContent = '';
+  RewardedAd? _rewardedAd;
+  int point = 0;
 
-  void getHighScore() async {
+  void getLocalData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       score1 = prefs.getInt('score1');
@@ -84,6 +89,14 @@ class _ChooseLevel extends State<ChooseLevel> {
       }
     });
 
+    // ポイント取得、初期値
+    if (prefs.getInt('point') == null) {
+      await prefs.setInt('point', Setting.initPoint);
+    }
+    setState(() {
+      point = prefs.getInt('point')!;
+    });
+
     if ((messageTitle + messageContent) != '') {
       showDialog(
         context: context,
@@ -104,9 +117,105 @@ class _ChooseLevel extends State<ChooseLevel> {
     }
   }
 
+  String getTestAdBannerUnitId() {
+    String testBannerUnitId = "";
+    if (Platform.isAndroid) {
+      // Android のとき
+      testBannerUnitId =
+          "ca-app-pub-3940256099942544/5224354917"; // Androidのデモ用バナー広告ID
+      // "ca-app-pub-3696030711426340/6066683507" リリース用 デバッグ時は必ずコメントアウトする。
+    } else if (Platform.isIOS) {
+      // iOSのとき
+      testBannerUnitId =
+          "ca-app-pub-3940256099942544/1712485313"; // iOSのデモ用バナー広告ID
+      // "ca-app-pub-3696030711426340/4341704144" リリース用 デバッグ時は必ずコメントアウトする。
+    }
+    return testBannerUnitId;
+  }
+
+  void _createRewardedAd() {
+    RewardedAd.load(
+      adUnitId: getTestAdBannerUnitId(),
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (RewardedAd ad) {
+          print('$ad loaded');
+          _rewardedAd = ad;
+          _rewardedAd!.setImmersiveMode(true);
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error.');
+        },
+      ),
+    );
+  }
+
+  void _showRewardedAd() {
+    if (_rewardedAd == null) {
+      showDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+          content: const Text('広告をロード中です。数秒待ってから再度ボタンを押してください。'),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('OK'),
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+      print('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (RewardedAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (RewardedAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        _createRewardedAd();
+      },
+      onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        _createRewardedAd();
+      },
+    );
+    _rewardedAd!.show(
+        onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
+      print('point earn start point:$point');
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      point = prefs.getInt('point')!;
+      setState(() {
+        prefs.setInt('point', ++point);
+      });
+      print('point earn end point:$point');
+      _rewardedAd = null;
+      showDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+          content: const Text('ポイントゲット!'),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('Close'),
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
   @override
   void initState() {
-    getHighScore();
+    getLocalData();
+    _createRewardedAd();
     super.initState();
   }
 
@@ -114,9 +223,9 @@ class _ChooseLevel extends State<ChooseLevel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: const Text('レベル選択'),
       ),
+      drawer: Menu(),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -128,10 +237,10 @@ class _ChooseLevel extends State<ChooseLevel> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const Text('挑戦するレベルを選択してください。'),
+                    const Text('挑戦するレベルを選択してください。\n1ポイントで挑戦できます。'),
                     Stack(
                       children: [
-                        LevelButton(level: 1),
+                        LevelButton(level: 1, point: point),
                         Positioned(
                           child: Stamp(score: score1, level: 1),
                           left: 0,
@@ -146,7 +255,7 @@ class _ChooseLevel extends State<ChooseLevel> {
                     ),
                     Stack(
                       children: [
-                        LevelButton(level: 2),
+                        LevelButton(level: 2, point: point),
                         Positioned(
                           child: Stamp(score: score2, level: 2),
                           left: 0,
@@ -161,7 +270,7 @@ class _ChooseLevel extends State<ChooseLevel> {
                     ),
                     Stack(
                       children: [
-                        LevelButton(level: 3),
+                        LevelButton(level: 3, point: point),
                         Positioned(
                           child: Stamp(score: score3, level: 3),
                           left: 0,
@@ -176,7 +285,8 @@ class _ChooseLevel extends State<ChooseLevel> {
                     ),
                     Stack(
                       children: [
-                        LevelButton(level: 4, lv4UnlockFlg: lv4UnlockFlg),
+                        LevelButton(
+                            level: 4, point: point, lv4UnlockFlg: lv4UnlockFlg),
                         Positioned(
                           child: Stamp(
                               score: score4,
@@ -194,7 +304,8 @@ class _ChooseLevel extends State<ChooseLevel> {
                     ),
                     Stack(
                       children: [
-                        LevelButton(level: 5, lv5UnlockFlg: lv5UnlockFlg),
+                        LevelButton(
+                            level: 5, point: point, lv5UnlockFlg: lv5UnlockFlg),
                         Positioned(
                           child: Stamp(score: score5, level: 5),
                           left: 0,
@@ -213,9 +324,44 @@ class _ChooseLevel extends State<ChooseLevel> {
             ),
             Row(
               children: [
-                Expanded(child: AdButton(message: 'とりあえず\n広告を見る')),
-                Expanded(child: AdButton(message: '何も考えず\n広告を見る')),
-                Expanded(child: AdButton(message: '広告を見て\nおちつく')),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      minimumSize: const Size.fromHeight(50),
+                    ),
+                    onPressed: () async {
+                      _showRewardedAd();
+                    },
+                    child: const Text(
+                      '広告をみて\nポイントをふやす',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.lightBlueAccent,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '$point ポイント',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -326,6 +472,7 @@ class LevelButton extends StatelessWidget {
   LevelButton(
       {Key? key,
       required this.level,
+      required this.point,
       this.lv4UnlockFlg = false,
       this.lv5UnlockFlg = false})
       : super(key: key) {
@@ -333,6 +480,7 @@ class LevelButton extends StatelessWidget {
   }
 
   int level = 0; //1,2,3
+  int point = 0;
   String strLevel = '';
   bool lv4UnlockFlg = false;
   bool lv5UnlockFlg = false;
@@ -354,17 +502,59 @@ class LevelButton extends StatelessWidget {
           // Lv4Unlockフラグがfalseの時、ボタンを非活性化
           onPressed: (level == 4 && lv4UnlockFlg == false)
               ? null
-              : () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Question(
-                        curNum: 0,
-                        curScore: 0,
-                        level: level,
+              : () {
+                  if (point < 1) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                        content: const Text('ポイントがありません・・・'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text('Close'),
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
                       ),
-                    ),
-                  );
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                        content: Text('1ポイント消費して、レベル：$strLevelに挑戦します。'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text('Cancel'),
+                            isDestructiveAction: true,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            child: const Text('OK'),
+                            isDefaultAction: true,
+                            onPressed: () async {
+                              final SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setInt('point', --point);
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Question(
+                                    curNum: 0,
+                                    curScore: 0,
+                                    level: level,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
           child: Text(
             strLevel,

@@ -43,5 +43,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+     <string>https</string>
+     <string>http</string>
+    </array>
+    <key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-3696030711426340~8235334234</string>
 </dict>
 </plist>
