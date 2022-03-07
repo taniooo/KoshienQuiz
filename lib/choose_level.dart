@@ -122,13 +122,13 @@ class _ChooseLevel extends State<ChooseLevel> {
     if (Platform.isAndroid) {
       // Android のとき
       testBannerUnitId =
-          "ca-app-pub-3940256099942544/5224354917"; // Androidのデモ用バナー広告ID
-      // "ca-app-pub-3696030711426340/6066683507" リリース用 デバッグ時は必ずコメントアウトする。
+          // "ca-app-pub-3940256099942544/5224354917"; // Androidのデモ用バナー広告ID
+          "ca-app-pub-3696030711426340/6066683507"; //リリース用 デバッグ時は必ずコメントアウトする。
     } else if (Platform.isIOS) {
       // iOSのとき
       testBannerUnitId =
-          "ca-app-pub-3940256099942544/1712485313"; // iOSのデモ用バナー広告ID
-      // "ca-app-pub-3696030711426340/4341704144" リリース用 デバッグ時は必ずコメントアウトする。
+          // "ca-app-pub-3940256099942544/1712485313"; // iOSのデモ用バナー広告ID
+          "ca-app-pub-3696030711426340/4341704144"; //リリース用 デバッグ時は必ずコメントアウトする。
     }
     return testBannerUnitId;
   }
