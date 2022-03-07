@@ -31,7 +31,7 @@ class Menu extends Drawer {
   Menu({Key? key}) : super(key: key);
 
   Future _launchURL() async {
-    const url = "https://taniooopage.web.app/policy.html";
+    const url = "https://taniooopage.web.app/policy1.html";
     if (await canLaunch(url)) {
       await launch(url);
     } else {
